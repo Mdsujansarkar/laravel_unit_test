@@ -51,18 +51,19 @@ class AuthController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function registerCreate(): view
+    public function registerCreate(): View
     {
         return view('auth.register');
     }
+
     public function registerStore(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required'],
-            'name' => ['required','string'],
+            'name' => ['required', 'string'],
         ]);
-         User::create([
+        User::create([
             'name' => $credentials['name'],
             'email' => $credentials['email'],
             'password' => Hash::make($credentials['password']),
